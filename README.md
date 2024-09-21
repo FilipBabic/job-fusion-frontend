@@ -1,6 +1,6 @@
 # JobFusion
 
-A full-stack job board application for recruiters and job seekers, allowing users to post and apply for jobs.
+A front-end job board application for recruiters and job seekers, allowing users to post and apply for jobs.
 
 ## Features
 
