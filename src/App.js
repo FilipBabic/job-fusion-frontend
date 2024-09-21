@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import PageLayout from "./components/PageLayout";
+import AuthProvider from "./context/AuthContext";
+import PrivateRoutes from "./components/PrivateRoutes";
+import HeadAdmin from "./dashboards/HeadAdminDashboard";
+import AdminDashboard from "./dashboards/AdminDashboard";
+import RecruiterDahboard from "./dashboards/RecruiterDashboard";
+import JobSeekerDashboard from "./dashboards/JobSeekerDashboard";
+import Home from "./pages/Home";
+import Companies from "./pages/Companies";
+import JobDetails from "./pages/JobDetails";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <AuthProvider>
+      <Routes>
+        <Route
+          element={
+            <PrivateRoutes allowedRoles={["head_admin", "admins", "recruiters", "job_seekers"]} />
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route path="/head-admin-dashboard" element={<HeadAdmin />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/recruiter-dashboard" element={<RecruiterDahboard />} />
+          <Route path="/job-seeker-dashboard" element={<JobSeekerDashboard />} />
+        </Route>
+        <Route
+          path="/"
+          element={
+            <PageLayout>
+              <Home />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/companies"
+          element={
+            <PageLayout>
+              <Companies />
+            </PageLayout>
+          }
+        />
+        <Route
+          path="/job-details/:id"
+          element={
+            <PageLayout>
+              <JobDetails />
+            </PageLayout>
+          }
+        />
+        <Route path="/register" element={<Register role="job_seekers" />} />
+        <Route path="/login" element={<Login />} />
+        {/* protected pages */}
+      </Routes>
+    </AuthProvider>
   );
-}
-
+};
 export default App;
