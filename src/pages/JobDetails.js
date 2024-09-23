@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
 import PageLayout from "../components/PageLayout";
+import Button from "../components/Button";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -100,9 +101,7 @@ const JobDetails = () => {
         </div>
 
         <div className="mt-6 text-right">
-          <button className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none">
-            Apply Now
-          </button>
+          <Button>Apply Now</Button>
         </div>
       </div>
     </PageLayout>

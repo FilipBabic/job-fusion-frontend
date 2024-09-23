@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PageLayout from "../components/PageLayout";
 import LoadingScreen from "../components/LoadingScreen";
+import Button from "../components/Button";
 const Home = () => {
   const [jobs, setJobs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,11 +35,11 @@ const Home = () => {
     return <LoadingScreen />; // Show loading state while fetching data
   }
   return (
-    <>
+    <PageLayout>
       <h1 className="text-3xl text-center text-fuchsia-800 mt-16">
         See the job offer on our website
       </h1>
-      ;
+
       {jobs.map((job) => (
         <div
           key={job.id}
@@ -81,14 +83,12 @@ const Home = () => {
             </div>
 
             <div className="p-4 bg-gray-50 text-right">
-              <button className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none">
-                Apply Now
-              </button>
+              <Button>Apply Now</Button>
             </div>
           </Link>
         </div>
       ))}
-    </>
+    </PageLayout>
   );
 };
 export default Home;

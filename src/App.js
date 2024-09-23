@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import PageLayout from "./components/PageLayout";
 import AuthProvider from "./context/AuthContext";
 import PrivateRoutes from "./components/PrivateRoutes";
 import HeadAdmin from "./dashboards/HeadAdminDashboard";
@@ -11,6 +10,8 @@ import Companies from "./pages/Companies";
 import JobDetails from "./pages/JobDetails";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import RegistrationSuccess from "./pages/RegistrationSuccess ";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -26,33 +27,13 @@ const App = () => {
           <Route path="/recruiter-dashboard" element={<RecruiterDahboard />} />
           <Route path="/job-seeker-dashboard" element={<JobSeekerDashboard />} />
         </Route>
-        <Route
-          path="/"
-          element={
-            <PageLayout>
-              <Home />
-            </PageLayout>
-          }
-        />
-        <Route
-          path="/companies"
-          element={
-            <PageLayout>
-              <Companies />
-            </PageLayout>
-          }
-        />
-        <Route
-          path="/job-details/:id"
-          element={
-            <PageLayout>
-              <JobDetails />
-            </PageLayout>
-          }
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/companies" element={<Companies />} />
+        <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/register" element={<Register role="job_seekers" />} />
         <Route path="/login" element={<Login />} />
-        {/* protected pages */}
+        <Route path="/registration-successful" element={<RegistrationSuccess />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AuthProvider>
   );

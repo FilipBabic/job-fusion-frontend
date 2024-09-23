@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import Button from "./Button";
 import Logo from "../assets/logos/job-fusion-logo-800x160.png";
 
 const Navbar = ({ darkMode, changeBg }) => {
@@ -12,40 +13,7 @@ const Navbar = ({ darkMode, changeBg }) => {
 
   return (
     <header className={`${darkMode} py-4 border-b`}>
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="flex flex-row items-center">
-          <div className="text-violet-800 text-lg font-bold">
-            <img src={`${Logo}`} className="h-10" alt="Navbar Logo" />
-          </div>
-          <nav className="hidden md:flex space-x-4 ml-2">
-            <Link to="/" className="text-violet-800">
-              Home
-            </Link>
-            <Link to="/" className="text-violet-800">
-              Jobs
-            </Link>
-            <Link to="/companies" className="text-violet-800">
-              Companies
-            </Link>
-          </nav>
-        </div>
-        <div className="flex flex-row">
-          <button
-            onClick={() => changeBg()}
-            className="hidden md:flex border border-violet-900 text-violet-900 py-1 px-2 mr-2 rounded"
-          >
-            {darkMode === "bg-white" ? <SunIcon height={24} /> : <MoonIcon height={24} />}
-          </button>
-          <button
-            onClick={() => changeBg()}
-            className="hidden md:flex border border-violet-900 text-violet-900 py-1 px-2 rounded"
-          >
-            <Link to="/login" className="text-violet-800">
-              Login
-            </Link>
-          </button>
-        </div>
-
+      <div className="flex w-full justify-around items-center">
         <div className="md:hidden">
           <button onClick={toggleMenu} className="text-violet-800 focus:outline-none">
             <svg
@@ -63,6 +31,33 @@ const Navbar = ({ darkMode, changeBg }) => {
               />
             </svg>
           </button>
+        </div>
+        <nav className="hidden md:flex space-x-4 ml-2 text-lg">
+          <Link to="/" className="text-violet-800">
+            Home
+          </Link>
+          <Link to="/" className="text-violet-800">
+            Jobs
+          </Link>
+          <Link to="/companies" className="text-violet-800">
+            Companies
+          </Link>
+        </nav>
+        <div className="flex flex-row items-center">
+          <div className="text-violet-800 text-lg font-bold">
+            <img src={`${Logo}`} className="h-10" alt="Navbar Logo" />
+          </div>
+        </div>
+        <div className="flex flex-row">
+          <button
+            onClick={() => changeBg()}
+            className="hidden md:flex border border-violet-900 text-violet-900 py-1 px-2 mr-2 rounded"
+          >
+            {darkMode === "bg-white" ? <SunIcon height={24} /> : <MoonIcon height={24} />}
+          </button>
+          <Button>
+            <Link to="/login">Login</Link>
+          </Button>
         </div>
       </div>
 
