@@ -49,14 +49,22 @@ const Navbar = ({ darkMode, changeBg }) => {
           </div>
         </div>
         <div className="flex flex-row">
-          <button
-            onClick={() => changeBg()}
-            className="hidden md:flex border border-violet-900 text-violet-900 py-1 px-2 mr-2 rounded"
-          >
-            {darkMode === "bg-white" ? <SunIcon height={24} /> : <MoonIcon height={24} />}
-          </button>
+          <div className="hidden md:flex">
+            {darkMode === "bg-white" ? (
+              <Button onClick={() => changeBg()}>
+                <MoonIcon height={20} />
+              </Button>
+            ) : (
+              <Button onClick={() => changeBg()}>
+                <SunIcon height={20} />
+              </Button>
+            )}
+          </div>
           <Button>
-            <Link to="/login">Login</Link>
+            <Link to="/login">Job seekers</Link>
+          </Button>
+          <Button>
+            <Link to="/login">Recruiters</Link>
           </Button>
         </div>
       </div>

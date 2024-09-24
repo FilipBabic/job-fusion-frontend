@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen";
+import ErrorPage from "./ErrorPage";
 import PageLayout from "../components/PageLayout";
 import Button from "../components/Button";
+import RenderJobDescriptions from "../components/RenderJobDescriptions";
 
 const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  console.log("PARAM", id);
+
   useEffect(() => {
     const fetchJob = async () => {
       setIsLoading(true);
@@ -20,15 +22,17 @@ const JobDetails = () => {
             "Content-Type": "application/json",
           },
         });
+
         if (response.ok) {
           const resData = await response.json();
-          console.log("RES DATA", resData);
-          setTimeout(() => setJob(resData), 1000);
+          setTimeout(() => setJob(resData), 100);
           setIsLoading(false);
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Failed to fetch job details");
         }
-      } catch (error) {
-        console.log("error:", error);
-        setError(error);
+      } catch (err) {
+        setError(err);
         setIsLoading(false);
       }
     };
@@ -36,19 +40,19 @@ const JobDetails = () => {
   }, []);
 
   if (isLoading) {
-    return <LoadingScreen />; // Show loading state while fetching data
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return <ErrorPage errorCode="error: 400" errorMessage={error.message} />;
   }
 
   if (!job) {
-    return (
-      <div>
-        <LoadingScreen />
-      </div>
-    ); // Show a fallback if no job data
+    return <LoadingScreen />;
   }
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 border border-gray-200">
+      <div className="max-w-4xl mx-auto p-6 my-6 bg-white shadow-lg rounded-lg mt-10 border border-gray-200">
         <div className="flex items-center space-x-4 pb-4 border-b border-gray-200">
           <img
             className="w-20 h-20 object-cover rounded-full border-2 border-gray-300"
@@ -63,11 +67,6 @@ const JobDetails = () => {
               {job.type}
             </span>
           </div>
-        </div>
-
-        <div className="mt-6">
-          <h2 className="text-xl font-semibold text-gray-800">Job Description</h2>
-          {/* <p className="text-gray-700 mt-2 leading-relaxed">{job.jobDescriptions}</p> */}
         </div>
 
         <div className="mt-6">
@@ -86,17 +85,15 @@ const JobDetails = () => {
           ) : (
             <p>No skills listed</p>
           )}
-          {console.log("skills", job.skills)}
         </div>
 
         <div className="mt-6">
-          <h2 className="text-xl font-semibold text-gray-800">Benefits</h2>
           <ul className="mt-2 space-y-2">
-            {/* {job.jobDescriptions.map((benefit, index) => (
-              <li key={index} className="text-gray-600">
-                • {benefit}
-              </li>
-            ))} */}
+            {!isLoading && job.jobDescriptions.length > 0 ? (
+              <RenderJobDescriptions job={job.jobDescriptions} />
+            ) : (
+              <p>No description provided for this job</p>
+            )}
           </ul>
         </div>
 
