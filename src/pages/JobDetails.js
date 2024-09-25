@@ -52,7 +52,7 @@ const JobDetails = () => {
   }
   return (
     <PageLayout>
-      <div className="max-w-4xl mx-auto p-6 my-6 bg-white shadow-lg rounded-lg mt-10 border border-gray-200">
+      <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10 border border-gray-200">
         <div className="flex items-center space-x-4 pb-4 border-b border-gray-200">
           <img
             className="w-20 h-20 object-cover rounded-full border-2 border-gray-300"
@@ -63,7 +63,7 @@ const JobDetails = () => {
             <h1 className="text-3xl font-bold text-gray-800">{job.title}</h1>
             <p className="text-gray-600">{job.organizationName}</p>
             <p className="text-gray-500">{job.location}</p>
-            <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 mt-2 rounded-full">
+            <span className="inline-block bg-yellow-100 text-tertiary-500 text-sm font-medium px-3 py-1 mt-2 rounded-full">
               {job.type}
             </span>
           </div>
@@ -76,7 +76,7 @@ const JobDetails = () => {
               {job.skills.map((skill, index) => (
                 <li
                   key={index}
-                  className="bg-blue-100 text-blue-700 text-sm font-medium px-2 py-1 rounded-lg m-1"
+                  className="bg-green-100 text-green-800 text-sm font-medium px-2 py-1 rounded-lg m-1"
                 >
                   {skill}
                 </li>

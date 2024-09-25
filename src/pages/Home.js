@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PageLayout from "../components/PageLayout";
+import Heading from "./Heading";
 import LoadingScreen from "../components/LoadingScreen";
 import JobSearch from "../components/JobSearch";
 
@@ -38,9 +39,7 @@ const Home = () => {
   }
   return (
     <PageLayout>
-      <h1 className="text-3xl text-center text-fuchsia-800 mt-16">
-        See the job offer at our website
-      </h1>
+      <Heading text="Search for the job offers at" />
       <JobSearch jobs={jobs} />
     </PageLayout>
   );

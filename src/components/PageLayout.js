@@ -9,7 +9,9 @@ const Layout = ({ children }) => {
   return (
     <div className={`h-full ${darkMode}`}>
       <Navbar darkMode={darkMode} changeBg={changeBg} />
-      <main className={`w-full min-h-screen max-w-screen-lg mx-auto px-4 lg:px-0`}>{children}</main>
+      <main className={`w-full min-h-screen max-w-screen-lg mx-auto pb-6 px-4 lg:px-0`}>
+        {children}
+      </main>
     </div>
   );
 };

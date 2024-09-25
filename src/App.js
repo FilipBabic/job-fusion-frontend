@@ -6,7 +6,7 @@ import AdminDashboard from "./dashboards/AdminDashboard";
 import RecruiterDahboard from "./dashboards/RecruiterDashboard";
 import JobSeekerDashboard from "./dashboards/JobSeekerDashboard";
 import Home from "./pages/Home";
-import Companies from "./pages/Companies";
+import Organizations from "./pages/Organizatons";
 import JobDetails from "./pages/JobDetails";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -28,7 +28,7 @@ const App = () => {
           <Route path="/job-seeker-dashboard" element={<JobSeekerDashboard />} />
         </Route>
         <Route path="/" element={<Home />} />
-        <Route path="/companies" element={<Companies />} />
+        <Route path="/organizations" element={<Organizations />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
         <Route path="/register" element={<Register role="job_seekers" />} />
         <Route path="/login" element={<Login />} />

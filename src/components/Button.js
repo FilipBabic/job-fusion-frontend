@@ -4,7 +4,7 @@ const Button = ({ buttonType, onClick, children }) => {
     <button
       type={buttonType === "submit" ? "submit" : "button"}
       onClick={onClick}
-      className={`${buttonWidth} mx-1 px-4 py-2 bg-violet-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-violet-700 focus:outline-none`}
+      className={`${buttonWidth} mx-1 px-4 py-2 bg-blue-700 text-white rounded disabled:bg-violet-300`}
     >
       {children}
     </button>

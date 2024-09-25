@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import { HomeIcon } from "@heroicons/react/24/solid";
 import Button from "./Button";
-import Logo from "../assets/logos/job-fusion-logo-800x160.png";
+import Logo from "../assets/logos/logo-job-fusion-800x160.png";
 
 const Navbar = ({ darkMode, changeBg }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,15 +33,30 @@ const Navbar = ({ darkMode, changeBg }) => {
             </svg>
           </button>
         </div>
-        <nav className="hidden md:flex space-x-4 ml-2 text-lg">
-          <Link to="/" className="text-violet-800">
-            Home
-          </Link>
-          <Link to="/" className="text-violet-800">
+        <nav className="hidden md:flex space-x-4 ml-2 text-lg text-blue-700">
+          <div className="flex flex-row space-x-1">
+            <button>
+              <Link to="/">
+                <HomeIcon height={28}>Home</HomeIcon>
+              </Link>
+            </button>
+            <div className="hidden md:flex">
+              {darkMode === "bg-white" ? (
+                <button onClick={() => changeBg()}>
+                  <MoonIcon height={28} />
+                </button>
+              ) : (
+                <button onClick={() => changeBg()}>
+                  <SunIcon height={28} />
+                </button>
+              )}
+            </div>
+          </div>
+          <Link to="/" className="text-xl hover:text-violet-700">
             Jobs
           </Link>
-          <Link to="/companies" className="text-violet-800">
-            Companies
+          <Link to="/organizations" className="text-xl hover:text-violet-700">
+            Organizations
           </Link>
         </nav>
         <div className="flex flex-row items-center">
@@ -49,17 +65,6 @@ const Navbar = ({ darkMode, changeBg }) => {
           </div>
         </div>
         <div className="flex flex-row">
-          <div className="hidden md:flex">
-            {darkMode === "bg-white" ? (
-              <Button onClick={() => changeBg()}>
-                <MoonIcon height={20} />
-              </Button>
-            ) : (
-              <Button onClick={() => changeBg()}>
-                <SunIcon height={20} />
-              </Button>
-            )}
-          </div>
           <Button>
             <Link to="/login">Job seekers</Link>
           </Button>
