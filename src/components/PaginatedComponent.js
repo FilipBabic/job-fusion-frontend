@@ -48,7 +48,7 @@ const PaginatedComponent = ({ data }) => {
   );
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-8">
       <div className="w-full overflow-x-auto min-h-full ">
         <div className="w-full flex">
           {paginatedData.map((item) => {

@@ -1,46 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import PageLayout from "../components/PageLayout";
 import Heading from "./Heading";
-import LoadingScreen from "../components/LoadingScreen";
+import DataFetcher from "../components/DataFetcher";
 import JobSearch from "../components/JobSearch";
+import LoadingScreen from "../components/LoadingScreen";
+import ErrorPage from "./ErrorPage";
 
 const Home = () => {
-  const [jobs, setJobs] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  useEffect(() => {
-    const fetchJobs = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch("http://localhost:5000/api/jobs", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (response.ok) {
-          const resData = await response.json();
-          console.log("RES DATA", resData.jobs);
-          setJobs(resData.jobs);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log("error:", error);
-        setError(error);
-        setIsLoading(false);
-      }
-    };
-    fetchJobs();
+  const apiUrl = "http://localhost:5000/api/jobs";
+  const customHeaders = useMemo(() => {
+    return {};
   }, []);
 
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
+  const [jobsData, setJobsData] = useState([]);
+
+  const handleDataFetched = useCallback((data) => {
+    setJobsData(data.jobs);
+  }, []);
+
   return (
     <PageLayout>
       <Heading text="Search for the job offers at" />
-      <JobSearch jobs={jobs} />
+
+      <DataFetcher
+        apiUrl={apiUrl}
+        method="GET"
+        headers={customHeaders}
+        onDataFetched={handleDataFetched}
+        renderLoading={() => <LoadingScreen />}
+        renderError={(error) => (
+          <ErrorPage
+            errorCode={`${error.split(" : ")[1]}`}
+            errorMessage={`error: ${error.split(" : ")[0]}`}
+          />
+        )}
+      />
+
+      {jobsData.length > 0 && <JobSearch jobs={jobsData} />}
     </PageLayout>
   );
 };

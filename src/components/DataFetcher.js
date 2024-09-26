@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-import LoadingScreen from "./LoadingScreen";
-import ErrorPage from "../pages/ErrorPage";
-const DataFetcher = ({ apiUrl, method = "GET", headers = {}, onDataFetched }) => {
+import { useState, useEffect } from "react";
+
+const DataFetcher = ({
+  apiUrl,
+  method = "GET",
+  headers = {},
+  onDataFetched,
+  renderLoading,
+  renderError,
+}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-
         const response = await fetch(apiUrl, {
           method: method,
           headers: {
@@ -19,7 +22,8 @@ const DataFetcher = ({ apiUrl, method = "GET", headers = {}, onDataFetched }) =>
         });
 
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+          const errorData = await response.json();
+          throw new Error(`${errorData.error} : ${errorData.status}`);
         }
 
         const data = await response.json();
@@ -32,16 +36,16 @@ const DataFetcher = ({ apiUrl, method = "GET", headers = {}, onDataFetched }) =>
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl, method, headers, onDataFetched]);
 
   if (loading) {
-    return <LoadingScreen />;
+    return renderLoading ? renderLoading() : <div>Loading...</div>;
   }
 
+  // Show error UI
   if (error) {
-    return <ErrorPage errorCode="error: 400" errorMessage={error.message} />;
+    return renderError ? renderError(error) : <div>Error: {error}</div>;
   }
-
   return null;
 };
 

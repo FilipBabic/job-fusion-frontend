@@ -1,22 +1,22 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import DataFetcher from "../components/DataFetcher";
 import PaginatedComponent from "../components/PaginatedComponent";
 import PageLayout from "../components/PageLayout";
 import Heading from "./Heading";
+import LoadingScreen from "../components/LoadingScreen";
+import ErrorPage from "./ErrorPage";
 
 const Organizations = () => {
-  const apiUrl = "http://localhost:5000/api/organizations"; // Example API URL
-  const customHeaders = {
-    // Authorization: "Bearer your-auth-token", // Example authorization token (optional)
-  };
+  const apiUrl = "http://localhost:5000/api/organizations";
+  const customHeaders = useMemo(() => {
+    return {};
+  }, []);
 
-  // State to store the fetched data
-  const [fetchedData, setFetchedData] = useState([]);
+  const [organizationsData, setOrganizationsData] = useState([]);
 
-  // Callback function to handle fetched data
-  const handleDataFetched = (data) => {
-    setFetchedData(data);
-  };
+  const handleDataFetched = useCallback((data) => {
+    setOrganizationsData(data);
+  }, []);
 
   return (
     <PageLayout>
@@ -27,11 +27,16 @@ const Organizations = () => {
         method="GET"
         headers={customHeaders}
         onDataFetched={handleDataFetched}
+        renderLoading={() => <LoadingScreen />}
+        renderError={(error) => (
+          <ErrorPage
+            errorCode={`${error.split(" : ")[1]}`}
+            errorMessage={`error: ${error.split(" : ")[0]}`}
+          />
+        )}
       />
 
-      <div className="mt-6">
-        <PaginatedComponent data={fetchedData} />
-      </div>
+      {organizationsData.length > 0 && <PaginatedComponent data={organizationsData} />}
     </PageLayout>
   );
 };
