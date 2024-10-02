@@ -1,15 +1,18 @@
 import { useContext, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 import { AuthContext } from "../context/AuthContext";
 import Button from "../components/Button";
+import TextInput from "../components/TextInput";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const userRole = location.state || {};
   const [error, setError] = useState(null);
 
   const validateInput = () => {
@@ -60,11 +63,12 @@ const Login = () => {
             navigate("/job-seeker-dashboard");
           }
         } else {
-          alert("Login failed: Invalid TOKEN");
+          const errorData = await response.json();
+          throw new Error(`${errorData.error} : ${errorData.status}`);
         }
-      } catch (error) {
-        setError(error.message);
-        console.log("Firebase login error: " + error.message);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+        console.log("ERO", err);
       }
     }
   };
@@ -74,37 +78,43 @@ const Login = () => {
       <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-6 text-violet-600">Login</h2>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            autoComplete="email"
-            placeholder="Enter your email"
-            value={email}
-            className="mt-1 p-2 border w-full rounded-md"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            className="mt-1 p-2 border w-full rounded-md"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              autoComplete="email"
+              placeholder="Enter your email"
+              value={email}
+              className="mt-1 p-2 border w-full rounded-md"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              className="mt-1 p-2 border w-full rounded-md"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
         </div>
         <Button buttonType="submit">Login</Button>
         {error && <p className="py-1 text-red-500 text-xs text-center italic">{error}</p>}
         <p className="mt-4 text-sm text-center">
           Don't have an account?{" "}
-          <Link to="/register" className="text-violet-600 font-medium hover:underline">
+          <Link
+            to="/register"
+            state={userRole}
+            className="text-violet-600 font-medium hover:underline"
+          >
             Register here
           </Link>
         </p>

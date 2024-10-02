@@ -54,7 +54,6 @@ const PaginatedComponent = ({ data }) => {
           {paginatedData.map((item) => {
             return (
               <div key={item.id} className="w-full p-2">
-                {/* Your component */}
                 <OrganizationCard
                   key={item.id}
                   name={item.name}
@@ -75,7 +74,7 @@ const PaginatedComponent = ({ data }) => {
       </div>
 
       {/* Pagination Controls */}
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-evenly mt-4">
         <button
           onClick={handlePrev}
           className="px-4 py-2 bg-violet-700 text-white rounded disabled:bg-violet-300"

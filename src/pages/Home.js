@@ -1,42 +1,33 @@
-import { useState, useMemo, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchJobs } from "../services/api/jobApi";
 import PageLayout from "../components/PageLayout";
-import Heading from "./Heading";
-import DataFetcher from "../components/DataFetcher";
 import JobSearch from "../components/JobSearch";
-import LoadingScreen from "../components/LoadingScreen";
+import LoadingScreen from "./LoadingScreen";
 import ErrorPage from "./ErrorPage";
 
 const Home = () => {
-  const apiUrl = "http://localhost:5000/api/jobs";
-  const customHeaders = useMemo(() => {
-    return {};
-  }, []);
+  const {
+    data: allJobs,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["allJobs"],
+    queryFn: () => fetchJobs(),
+    staleTime: 5 * 60 * 1000, // Data stays fresh for 5 minutes
+    cacheTime: 30 * 60 * 1000, // Cache for 30 minutes
+  });
 
-  const [jobsData, setJobsData] = useState([]);
-
-  const handleDataFetched = useCallback((data) => {
-    setJobsData(data.jobs);
-  }, []);
-
-  return (
-    <PageLayout>
-      <Heading text="Search for the job offers at" />
-
-      <DataFetcher
-        apiUrl={apiUrl}
-        method="GET"
-        headers={customHeaders}
-        onDataFetched={handleDataFetched}
-        renderLoading={() => <LoadingScreen />}
-        renderError={(error) => (
-          <ErrorPage
-            errorCode={`${error.split(" : ")[1]}`}
-            errorMessage={`error: ${error.split(" : ")[0]}`}
-          />
-        )}
+  if (isLoading) return <LoadingScreen />;
+  if (error)
+    return (
+      <ErrorPage
+        errorCode={`${error.message.split(" : ")[1]}`}
+        errorMessage={`error: ${error.message.split(" : ")[0]}`}
       />
-
-      {jobsData.length > 0 && <JobSearch jobs={jobsData} />}
+    );
+  return (
+    <PageLayout text="Search for the job offers:">
+      {allJobs.jobs.length > 0 && <JobSearch jobs={allJobs.jobs} />}
     </PageLayout>
   );
 };

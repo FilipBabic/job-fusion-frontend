@@ -19,7 +19,7 @@ const App = () => {
       <Routes>
         <Route
           element={
-            <PrivateRoutes allowedRoles={["head_admin", "admins", "recruiters", "job_seekers"]} />
+            <PrivateRoutes allowedRoles={["head_admins", "admins", "recruiters", "job_seekers"]} />
           }
         >
           <Route path="/head-admin-dashboard" element={<HeadAdmin />} />
@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/organizations" element={<Organizations />} />
         <Route path="/job-details/:id" element={<JobDetails />} />
-        <Route path="/register" element={<Register role="job_seekers" />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration-successful" element={<RegistrationSuccess />} />
         <Route path="*" element={<NotFound />} />

@@ -1,90 +1,93 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { SunIcon, MoonIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { HomeIcon } from "@heroicons/react/24/solid";
-import Button from "./Button";
-import Logo from "../assets/logos/logo-job-fusion-800x160.png";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = ({ darkMode, changeBg }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <header className={`${darkMode} py-4 border-b`}>
-      <div className="flex w-full justify-around items-center">
-        <div className="md:hidden">
-          <button onClick={toggleMenu} className="text-violet-800 focus:outline-none">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              />
-            </svg>
-          </button>
-        </div>
-        <nav className="hidden md:flex space-x-4 ml-2 text-lg text-blue-700">
-          <div className="flex flex-row space-x-1">
+    <header className={`${darkMode} py-2 border-b border-dotted`}>
+      <div className="flex w-full justify-between md:justify-around items-center">
+        <div className="hidden md:flex flex-row items-center">
+          <div className="flex flex-row space-x-1 text-blue-700 hover:text-gray-700">
             <button>
               <Link to="/">
                 <HomeIcon height={28}>Home</HomeIcon>
               </Link>
             </button>
-            <div className="hidden md:flex">
-              {darkMode === "bg-white" ? (
-                <button onClick={() => changeBg()}>
-                  <MoonIcon height={28} />
-                </button>
-              ) : (
-                <button onClick={() => changeBg()}>
-                  <SunIcon height={28} />
-                </button>
-              )}
-            </div>
           </div>
-          <Link to="/" className="text-xl hover:text-violet-700">
-            Jobs
-          </Link>
-          <Link to="/organizations" className="text-xl hover:text-violet-700">
-            Organizations
-          </Link>
-        </nav>
-        <div className="flex flex-row items-center">
-          <div className="text-violet-800 text-lg font-bold">
-            <img src={`${Logo}`} className="h-10" alt="Navbar Logo" />
-          </div>
+
+          <nav className="hidden md:flex space-x-4 ml-2">
+            <Link to="/" className="text-blue-700 text-lg hover:text-gray-700">
+              Jobs
+            </Link>
+            <Link to="/organizations" className="text-violet-700 text-lg hover:text-gray-700">
+              Organizations
+            </Link>
+          </nav>
         </div>
+        <div className="md:hidden">
+          <button onClick={toggleMenu} className="px-2 py-2 text-blue-700">
+            <Bars3Icon height={28} />
+          </button>
+        </div>
+        {/* <div>
+          <img src={`${Logo}`} className="h-10" alt="Navbar Logo" />
+        </div> */}
         <div className="flex flex-row">
-          <Button>
-            <Link to="/login">Job seekers</Link>
-          </Button>
-          <Button>
-            <Link to="/login">Recruiters</Link>
-          </Button>
+          <div className="hidden md:flex text-blue-500">
+            {darkMode === "bg-white" ? (
+              <button
+                className=" px-1 text-blue-700 hover:text-gray-700"
+                onClick={() => changeBg()}
+              >
+                <SunIcon height={24} />
+              </button>
+            ) : (
+              <button
+                className=" px-2 text-blue-700 hover:text-gray-700"
+                onClick={() => changeBg()}
+              >
+                <MoonIcon height={24} />
+              </button>
+            )}
+          </div>
+          {user && <ProfileDropdown />}
+
+          {!user && (
+            <>
+              <button className="mx-1 px-2 py-1 bg-blue-700 text-white rounded hover:bg-blue-800">
+                <Link to="/login" state={`job_seekers`}>
+                  Job seekers
+                </Link>
+              </button>
+              <button className="mx-1 px-2 py-1 bg-violet-700 text-white rounded hover:bg-violet-800">
+                <Link to="/login" state={`recruiters`}>
+                  Recruiters
+                </Link>
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-blue-500">
+        <div className="md:hidden">
           <nav className="flex flex-col space-y-2 p-4">
-            <Link to="/" className="text-violet-800">
-              Home
-            </Link>
-            <Link to="/" className="text-violet-800">
+            <Link to="/" className="text-blue-700">
               Jobs
             </Link>
-            <Link to="/companies" className="text-violet-800">
+            <Link to="/organizations" className="text-violet-700">
               Companies
             </Link>
           </nav>

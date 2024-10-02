@@ -42,7 +42,6 @@ const DataFetcher = ({
     return renderLoading ? renderLoading() : <div>Loading...</div>;
   }
 
-  // Show error UI
   if (error) {
     return renderError ? renderError(error) : <div>Error: {error}</div>;
   }

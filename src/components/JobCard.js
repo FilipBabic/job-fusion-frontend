@@ -14,9 +14,9 @@ const JobCard = ({
   return (
     <div key={id} className="md:w-1/2 mt-3 px-3 bg-white overflow-hidden">
       <Link to={{ pathname: `/job-details/${id}` }}>
-        <div className="flex items-center p-4 bg-gray-100 rounded-t-lg border border-b-0 border-gray-200">
+        <div className="flex items-center p-4 bg-blue-50 rounded-t-lg border border-b-0 border-gray-200">
           <img
-            className="w-16 h-16 object-cover rounded-full border-2 border-gray-300"
+            className="w-16 h-16 object-cover rounded-full border-2 border-blue-300"
             src={organizationLogo}
             alt={`${organizationName} logo`}
           />
@@ -26,8 +26,8 @@ const JobCard = ({
           </div>
         </div>
 
-        <div className="p-4 border border-gray-200">
-          <h2 className="text-2xl font-semibold text-blue-500">{title}</h2>
+        <div className="p-4 border border-blue-200">
+          <h2 className="text-2xl font-semibold text-blue-700">{title}</h2>
           <p className="text-gray-600 mt-1">
             {starts} - {expires}
           </p>
@@ -54,7 +54,7 @@ const JobCard = ({
           </div>
         </div>
       </Link>
-      <div className="p-4 bg-gray-50 text-right mb-auto border border-t-0 border-gray-200">
+      <div className="p-4 bg-blue-50 text-right mb-auto border border-t-0 border-blue-200">
         <Button>Apply Now</Button>
       </div>
     </div>

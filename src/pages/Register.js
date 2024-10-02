@@ -2,12 +2,16 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
+import { useLocation } from "react-router-dom";
 import Button from "../components/Button";
+import TextInput from "../components/TextInput";
 
-const Register = ({ role }) => {
+const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const role = location.state || {};
 
   const [error, setError] = useState(null);
 
@@ -49,11 +53,12 @@ const Register = ({ role }) => {
         if (response.ok) {
           navigate("/registration-successful");
         } else {
-          alert("Error registering user", response.error);
+          const errorData = await response.json();
+          throw new Error(`${errorData.error} : ${errorData.status}`);
         }
-      } catch (error) {
-        setError(error.code.split("/")[1]);
-        console.log("ERO", error.code);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+        console.log("ERO", err);
       }
     }
   };
@@ -62,34 +67,36 @@ const Register = ({ role }) => {
     <div className="flex justify-center items-center h-screen bg-gradient-to-r from-fuchsia-600 to-violet-700">
       <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold text-center mb-6 text-violet-600">
-          Register as {role.slice(0, -1)}
+          Register as {role && role.slice(0, -1)}
         </h2>
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            autoComplete="email"
-            placeholder="Enter your email"
-            value={email}
-            className="mt-1 p-2 border w-full rounded-md"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={password}
-            className="mt-1 p-2 border w-full rounded-md"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              autoComplete="email"
+              placeholder="Enter your email"
+              value={email}
+              className="mt-1 p-2 border w-full rounded-md"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="mb-6">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              className="mt-1 p-2 border w-full rounded-md"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
         </div>
         <Button buttonType="submit">Register</Button>
         {error && <p className="py-1 text-red-500 text-xs text-center italic">{error}</p>}

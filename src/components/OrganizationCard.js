@@ -11,27 +11,27 @@ const OrganizationCard = ({
   logo,
 }) => {
   return (
-    <div className="bg-violet-100 p-6 rounded-lg min-h-full border border-violet-700">
+    <div className="bg-violet-100 p-6 rounded-lg min-h-full border border-dotted border-violet-700">
       {/* Logo Section */}
       <div className="mx-auto w-60 h-30 overflow-hidden">
         <img
           src={logo}
           alt={`${name} Logo`}
-          className="object-cover w-full h-full bg-white border-2 border-blue-500"
+          className="object-cover w-full h-full bg-white border border-violet-500"
         />
       </div>
 
       {/* Company Info Section */}
       <div className="text-center mt-4">
-        <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
-        <p className="text-sm text-gray-600 mt-1">
+        <h2 className="text-4xl font-bold text-gray-800">{name}</h2>
+        <p className="text-base text-gray-500 mt-1">
           {industry} - {type}
         </p>
       </div>
 
       {/* About Section */}
       <div className="mt-4">
-        <p className="text-gray-800 text-justify">{about}</p>
+        <p className="text-lg text-gray-800 text-justify">{about}</p>
       </div>
 
       {/* Location Section */}

@@ -1,42 +1,34 @@
-import { useState, useMemo, useCallback } from "react";
-import DataFetcher from "../components/DataFetcher";
+import { useQuery } from "@tanstack/react-query";
+import { fetchOrganizations } from "../services/api/organizationApi";
 import PaginatedComponent from "../components/PaginatedComponent";
 import PageLayout from "../components/PageLayout";
-import Heading from "./Heading";
-import LoadingScreen from "../components/LoadingScreen";
+import LoadingScreen from "./LoadingScreen";
 import ErrorPage from "./ErrorPage";
 
 const Organizations = () => {
-  const apiUrl = "http://localhost:5000/api/organizations";
-  const customHeaders = useMemo(() => {
-    return {};
-  }, []);
+  const {
+    data: allOrganizations,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["allOrganizations"],
+    queryFn: () => fetchOrganizations(),
+    staleTime: 5 * 60 * 1000, // Data stays fresh for 5 minutes
+    cacheTime: 30 * 60 * 1000, // Cache for 30 minutes
+  });
 
-  const [organizationsData, setOrganizationsData] = useState([]);
-
-  const handleDataFetched = useCallback((data) => {
-    setOrganizationsData(data);
-  }, []);
+  if (isLoading) return <LoadingScreen />;
+  if (error)
+    return (
+      <ErrorPage
+        errorCode={`${error.message.split(" : ")[1]}`}
+        errorMessage={`error: ${error.message.split(" : ")[0]}`}
+      />
+    );
 
   return (
-    <PageLayout>
-      <Heading text="See organizations with job advertisements at" />
-
-      <DataFetcher
-        apiUrl={apiUrl}
-        method="GET"
-        headers={customHeaders}
-        onDataFetched={handleDataFetched}
-        renderLoading={() => <LoadingScreen />}
-        renderError={(error) => (
-          <ErrorPage
-            errorCode={`${error.split(" : ")[1]}`}
-            errorMessage={`error: ${error.split(" : ")[0]}`}
-          />
-        )}
-      />
-
-      {organizationsData.length > 0 && <PaginatedComponent data={organizationsData} />}
+    <PageLayout text="See organizations with job advertisements:">
+      {allOrganizations.length > 0 && <PaginatedComponent data={allOrganizations} />}
     </PageLayout>
   );
 };

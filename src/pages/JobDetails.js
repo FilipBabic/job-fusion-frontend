@@ -1,40 +1,34 @@
-import { useState, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import DataFetcher from "../components/DataFetcher";
+import { useQuery } from "@tanstack/react-query";
+import { fetchJobById } from "../services/api/jobApi";
 import PageLayout from "../components/PageLayout";
-import LoadingScreen from "../components/LoadingScreen";
+import LoadingScreen from "./LoadingScreen";
 import ErrorPage from "./ErrorPage";
 import JobDetailsCard from "../components/JobDetailsCard";
 
 const JobDetails = () => {
   const { id } = useParams();
-  const apiUrl = `http://localhost:5000/api/jobs/${id}`;
-  const customHeaders = useMemo(() => {
-    return {};
-  }, []);
+  const {
+    data: job,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: ["jobDetails", id],
+    queryFn: () => fetchJobById(id),
+    staleTime: 5 * 60 * 1000, // Data stays fresh for 5 minutes
+    cacheTime: 30 * 60 * 1000, // Cache for 30 minutes
+  });
 
-  const [job, setJob] = useState([]);
-
-  const handleDataFetched = useCallback((data) => {
-    setJob(data);
-  }, []);
-
+  if (isLoading) return <LoadingScreen />;
+  if (error)
+    return (
+      <ErrorPage
+        errorCode={`${error.message.split(" : ")[1]}`}
+        errorMessage={`error: ${error.message.split(" : ")[0]}`}
+      />
+    );
   return (
     <PageLayout>
-      <DataFetcher
-        apiUrl={apiUrl}
-        method="GET"
-        headers={customHeaders}
-        onDataFetched={handleDataFetched}
-        renderLoading={() => <LoadingScreen />}
-        renderError={(error) => (
-          <ErrorPage
-            errorCode={`${error.split(" : ")[1]}`}
-            errorMessage={`error: ${error.split(" : ")[0]}`}
-          />
-        )}
-      />
-
       {job && (
         <JobDetailsCard
           title={job.title}

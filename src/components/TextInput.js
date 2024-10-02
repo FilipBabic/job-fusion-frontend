@@ -5,6 +5,7 @@ const TextInput = ({
   type = "text",
   name,
   id,
+  autoComplete = "false",
   value,
   placeholder,
   onChange,
@@ -12,9 +13,9 @@ const TextInput = ({
   className = "",
 }) => {
   return (
-    <div className="w-full md:w-1/3 my-3 px-4">
+    <>
       {label && (
-        <label htmlFor={id} className="block text-lg font-medium px-4 text-tertiary-500">
+        <label htmlFor={id} className="block text-lg mx-2 font-medium text-white">
           {label}
         </label>
       )}
@@ -22,13 +23,14 @@ const TextInput = ({
         type={type}
         name={name}
         id={id}
+        autoComplete={autoComplete}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${className}`}
+        className={`mt-1 p-2 border w-full bg-blue-100 placeholder-gray-500 rounded-md focus:ring-2 focus:ring-yellow-300 focus:outline-none ${className}`}
       />
-    </div>
+    </>
   );
 };
 
